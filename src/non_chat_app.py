@@ -10,6 +10,8 @@ pipe = pipeline("text-generation", "/mnt/store/llama-3-8b-bf16")
 
 class InputData(BaseModel):
     input_data: str
+    max_new_tokens: int = 2046
+    temperature: float = 0.01
     stop_token: Optional[str] = None
 
 @app.post("/generate")
@@ -20,8 +22,8 @@ async def generate(data: InputData):
     
     outputs = pipe(
         data.input_data,
-        max_new_tokens=128,
-        temperature=0.01,
+        max_new_tokens=data.max_new_tokens,  
+        temperature=data.temperature,
         eos_token_id=eos_token_id,
     )
     out_str = outputs[0]["generated_text"][len(data.input_data):].strip() # type: ignore
