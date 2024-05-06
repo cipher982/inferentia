@@ -29,4 +29,5 @@ async def generate(input_data: ChatInputData):
     )
     
     out_str = outputs[0]["generated_text"][len(inputs):].strip()
-    return {"generated_text": out_str, "tokens": outputs[0]["tokens"]}
+    n_tokens = len(pipe.tokenizer.encode(out_str))
+    return {"generated_text": out_str, "tokens": n_tokens}
